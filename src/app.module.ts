@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { Users } from './auth/entities/user.entity';
 import { BookModule } from './book/book.module';
 import { Books } from './book/entities/book.entity';
+import { OrderModule } from './order/order.module';
+import { Orders } from './order/entities/order.entity';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { Books } from './book/entities/book.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Users, Books],
+      entities: [Users, Books, Orders],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -36,6 +38,7 @@ import { Books } from './book/entities/book.entity';
     }),
     AuthModule,
     BookModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

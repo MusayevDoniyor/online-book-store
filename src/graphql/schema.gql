@@ -53,6 +53,11 @@ input CreateBookInput {
   title: String!
 }
 
+input CreateOrderInput {
+  """Book IDs"""
+  bookIDs: [String!]!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -68,16 +73,29 @@ input LoginInput {
 
 type Mutation {
   createBook(createBookInput: CreateBookInput!): BookResponse!
+  createOrder(createOrderInput: CreateOrderInput!): Orders!
   loginUser(loginInput: LoginInput!): AuthResponse!
   registerUser(registerInput: RegisterInput!): AuthResponse!
   removeBook(id: String!): BookResponse!
   updateBook(updateBookInput: UpdateBookInput!): BookResponse!
 }
 
+type Orders {
+  books: [Books!]!
+  created_at: DateTime!
+
+  """Order ID"""
+  id: String!
+  total_price: Float!
+  user: Users!
+}
+
 type Query {
   book(id: Int!): Books!
   books: [Books!]!
   me: Users!
+  order(id: String!): Orders!
+  orders: [Orders!]!
 }
 
 input RegisterInput {
@@ -127,6 +145,7 @@ type Users {
 
   """User name"""
   name: String!
+  orders: [Orders!]!
 
   """User role"""
   role: String!

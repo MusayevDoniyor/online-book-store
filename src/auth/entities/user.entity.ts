@@ -9,9 +9,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Orders } from 'src/order/entities/order.entity';
 
 export enum UserRoles {
   ADMIN = 'admin',
@@ -56,6 +58,10 @@ export class Users {
     description: 'User registered time',
   })
   created_at: Date;
+
+  @Field(() => [Orders])
+  @OneToMany(() => Orders, (order) => order.user)
+  orders: Orders[];
 
   @BeforeInsert()
   async hashPassword() {
