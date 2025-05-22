@@ -17,6 +17,7 @@ import { Orders } from './order/entities/order.entity';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: ['.env', 'example.env'],
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
