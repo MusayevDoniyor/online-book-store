@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Users } from 'src/auth/entities/user.entity';
@@ -18,6 +23,14 @@ export class RolesGuard implements CanActivate {
 
     const user: Users = ctx.getContext().req.user;
 
-    return requiredRoles.includes(user.role);
+    const hasRole = requiredRoles.includes(user.role);
+
+    if (!hasRole) {
+      throw new ForbiddenException(
+        `You do not have permission to perform this action. Required role(s): ${requiredRoles.join(', ')}`,
+      );
+    }
+
+    return true;
   }
 }

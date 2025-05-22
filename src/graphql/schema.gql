@@ -8,6 +8,51 @@ type AuthResponse {
   user: Users!
 }
 
+type BookResponse {
+  """Book response data"""
+  book: Books!
+
+  """Book response description"""
+  message: String!
+}
+
+type Books {
+  """Book author"""
+  author: String!
+
+  """Book created time"""
+  created_at: DateTime!
+
+  """Book description"""
+  description: String!
+
+  """Book ID"""
+  id: String!
+
+  """Book available"""
+  is_available: Boolean!
+
+  """Book price"""
+  price: Float!
+
+  """Book title"""
+  title: String!
+}
+
+input CreateBookInput {
+  """Book author"""
+  author: String!
+
+  """Book description"""
+  description: String!
+
+  """Book price"""
+  price: Float!
+
+  """Book title"""
+  title: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -22,11 +67,16 @@ input LoginInput {
 }
 
 type Mutation {
+  createBook(createBookInput: CreateBookInput!): BookResponse!
   loginUser(loginInput: LoginInput!): AuthResponse!
   registerUser(registerInput: RegisterInput!): AuthResponse!
+  removeBook(id: String!): BookResponse!
+  updateBook(updateBookInput: UpdateBookInput!): BookResponse!
 }
 
 type Query {
+  book(id: Int!): Books!
+  books: [Books!]!
   me: Users!
 }
 
@@ -42,6 +92,21 @@ input RegisterInput {
 
   """User roles"""
   role: UserRoles! = USER
+}
+
+input UpdateBookInput {
+  """Book author"""
+  author: String
+
+  """Book description"""
+  description: String
+  id: String!
+
+  """Book price"""
+  price: Float
+
+  """Book title"""
+  title: String
 }
 
 """Available roles for users"""

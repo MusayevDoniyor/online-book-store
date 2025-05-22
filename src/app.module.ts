@@ -8,6 +8,8 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { Users } from './auth/entities/user.entity';
+import { BookModule } from './book/book.module';
+import { Books } from './book/entities/book.entity';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { Users } from './auth/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Users],
+      entities: [Users, Books],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -32,8 +34,8 @@ import { Users } from './auth/entities/user.entity';
       sortSchema: true,
       context: ({ req }) => ({ req }),
     }),
-
     AuthModule,
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
