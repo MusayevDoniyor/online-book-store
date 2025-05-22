@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateOrderInput } from './dto/create-order.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/order.entity';
@@ -62,5 +67,29 @@ export class OrderService {
       where: { id },
       relations: ['user', 'books'],
     });
+  }
+
+  async remove(orderId: string, user: Users) {
+    const order = await this.orderRepo.findOne({
+      where: { id: orderId },
+      relations: ['books', 'user'],
+    });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    if (order.user.id !== user.id && user.role !== 'admin') {
+      throw new ForbiddenException('Access denied');
+    }
+
+    order.books.forEach((book) => {
+      book.is_available = true;
+    });
+
+    await this.bookRepo.save(order.books);
+    await this.orderRepo.remove(order);
+
+    return { message: 'Order successfully deleted' };
   }
 }

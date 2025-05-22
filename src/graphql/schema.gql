@@ -74,6 +74,7 @@ input LoginInput {
 type Mutation {
   createBook(createBookInput: CreateBookInput!): BookResponse!
   createOrder(createOrderInput: CreateOrderInput!): Orders!
+  deleteOrder(orderId: String!): String!
   loginUser(loginInput: LoginInput!): AuthResponse!
   registerUser(registerInput: RegisterInput!): AuthResponse!
   removeBook(id: String!): BookResponse!

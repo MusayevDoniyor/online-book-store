@@ -33,4 +33,13 @@ export class OrderResolver {
   findOne(@Args('id', { type: () => String }) id: string) {
     return this.orderService.findOne(id);
   }
+
+  @Mutation(() => String)
+  async deleteOrder(
+    @Args('orderId') orderId: string,
+    @CurrentUser() user: Users,
+  ) {
+    const result = await this.orderService.remove(orderId, user);
+    return result.message;
+  }
 }
